@@ -13,7 +13,7 @@ WE_table <- read.table(file = 'dataWE.txt',sep = "", header = TRUE) # sep = '' c
 
 Plot the first two principal components of "dataWE.txt", color based on "ModAnc"
 ```{r}
-ggplot(WE_table, aes(PC1,PC2))+
+ggplot(WE_table, aes(PC1,PC2)) +
   geom_jitter(aes(color = ModAnc)) # jitter adds noise to avoid overplotting
 ```
 
@@ -50,7 +50,7 @@ The graph seems to prove our assumptions.
 Subset the dataset to four populations of your choice and plot the result. Interpret the relationship between populations.
 --->
 ```{r}
-our_choice <- c("Sicilian", "French", "Italian_North", "Spanish", "English")
+our_choice <- c("Sicilian", "French", "Italian_North", "Spanish")
 ggplot(data = WE_table |> filter(POP %in% our_choice), #Filtering on our choices
        aes(x = PC1, y = PC2, colour = POP) 
        )+
@@ -102,4 +102,73 @@ ggplot(data = WE_table |> filter(POP %in% our_choice), #Filtering on our choices
 ```
 In all the above the combinations between the different principal components (PCs) there are no clear clusters and all the populations are mixed compared to the previous PCs combinations.
 The reason behind this behavior is related to the way in which the principal components are calculated and what they are.
-The principal component analysis (PCA) is a statistical instrument that has as principal aim the one of creating vectors that reduce the variance between the different variables. The first two PCs are the one which takes the most variance between the sample while the others principal components reduce the variables with less variance between them.
+The principal component analysis (PCA) is a statistical instrument that has as principal aim the one of creating vectors describing the variance between different elements while reducing the dimensions of the data set. The first two PCs are the ones with the most variance between the observations while the others principal components reduce the variables with less variance between them. 
+Therefore the first two PCs are the one that describe the most the variance inside the sample and the more further PCs are the one with less variance and therefore the resulting graphs show a mixture of data points with no clear pattern between the different population and almost uniform points.
+
+# Exercise 6
+Correlate the latitude and longitude of ancient individuals with the first two principal components (hint: use the R function merge to merge the dataWE.txt.zip and dataWE_LatLong.txt.zip datasets by the IND column). Report the correlation coefficients and their significance. Comment on the result.
+--> 
+```{r}
+# ?merge  --> merge two data frames by common columns or row names
+WE_LatLong <- read.table("dataWE_LatLong.txt", header = TRUE)
+WE_merged <- merge(x = WE_table, y= WE_LatLong, by = "IND") # merging by the IND column
+# Correlation between Latitude and PC1
+plot(
+  x = WE_merged$Latitude, 
+  y = WE_merged$PC1,
+  main = "Correlation Between Latitude and PC1",  # Title of the plot
+  xlab = "Latitude",  # Label for the x-axis
+  ylab = "PC1"        # Label for the y-axis
+)
+Cor_Lat_PC1 <- cor.test(WE_merged$Latitude, WE_merged$PC1)
+Cor_Lat_PC1
+
+# Correlation between Latitude and PC2
+plot(
+  x = WE_merged$Latitude, 
+  y = WE_merged$PC2,
+  main = "Correlation Between Latitude and PC2", 
+  xlab = "Latitude", 
+  ylab = "PC2"
+)
+Cor_Lat_PC2 <- cor.test(WE_merged$Latitude, WE_merged$PC2)
+Cor_Lat_PC2
+
+# Correlation between Longitude and PC1
+plot(
+  x = WE_merged$Longitude, 
+  y = WE_merged$PC1,
+  main = "Correlation Between Longitude and PC1", 
+  xlab = "Longitude", 
+  ylab = "PC1"
+)
+Cor_Lon_PC1 <- cor.test(WE_merged$Longitude, WE_merged$PC1)
+Cor_Lon_PC1
+
+# Correlation between Longitude and PC2
+plot(
+  x = WE_merged$Longitude, 
+  y = WE_merged$PC2,
+  main = "Correlation Between Longitude and PC2", 
+  xlab = "Longitude", 
+  ylab = "PC2"
+)
+Cor_Lon_PC2 <- cor.test(WE_merged$Longitude, WE_merged$PC2)
+Cor_Lat_PC2
+
+Correlations <- data.frame(
+  Group = c("Lat_PC1", "Lat_PC2", "Lon_PC1", "Lon_PC2"),
+ Correlation_Coefficient = c(
+    as.numeric(Cor_Lat_PC1$estimate),
+    as.numeric(Cor_Lat_PC2$estimate),
+    as.numeric(Cor_Lon_PC1$estimate),
+    as.numeric(Cor_Lon_PC2$estimate)
+  ),
+  P_value = c(Cor_Lat_PC1$p.value, Cor_Lat_PC2$p.value, Cor_Lon_PC1$p.value, Cor_Lon_PC2$p.value)
+  )
+Correlations
+```
+All the correlation coefficient but one have a p-value under the significance significance level, and the only exception has a p-value slightly above 0.05. Therefore we can refuse the null hypothesis that all the correlation coefficients are equal to zero (expect for the correlation coefficient between Longitude and PC2 that is a bit uncertain).
+The highest correlation coefficient is related to Longitude and PC2.
+
+
