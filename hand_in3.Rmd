@@ -1,42 +1,53 @@
+---
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
 # HAND-IN 3
+
 Loading paper data - 230 West Eurasians who lived between 6500 and 300 bc - by Mathieson et al. 2015 on Nature
+
 ```{r}
 library(tidyverse)
 ```
+
 # West Eurasian populations
 
 ## Exercise 1
-Plot the first two principal components of the dataWE.txt.zip dataset. Use the ModAnc column to color the points.
---->
+
+Plot the first two principal components of the dataWE.txt.zip dataset.
+Use the ModAnc column to color the points.
+---\>
 
 ```{r}
 WE_table <- read.table(file = 'dataWE.txt',sep = "", header = TRUE) # sep = '' consider any white space
 ```
 
 Plot the first two principal components of "dataWE.txt", color based on "ModAnc"
+
 ```{r}
 ggplot(WE_table, aes(PC1,PC2)) +
   geom_jitter(aes(color = ModAnc)) # jitter adds noise to avoid overplotting
 ```
 
-
-
 We also tried to to make the plot as "Extended Data Figure 4.A" from the paper by Mathieson et al. 2015 on Nature.
 Plotting the ancient DNA data over the modern DNA data.
+
 ```{r}
 ggplot(WE_table, aes(PC1,PC2))+
   geom_point(alpha = 0.1) +
   geom_jitter(data = WE_table |> filter(!ModAnc=="Modern"), aes(color = ModAnc))
 ```
-This plot in chunk 2 has less categories that the one in the paper because they divided:
-"Early-farmer" in "Early Farmer (AN - Anatolian Neolithic)", "Early Farmer (CEM - Central European Early & Middle Neolithic)", Early farmer (INC - Iberian Neolithic & Chalcolithic)";
-"Steppe" in "Steppe Ancestry (CLB - Central European Late Neolithic & Bronze Age)", "Steppe Ancestry (STP - Steppe)".
+
+This plot in chunk 2 has less categories that the one in the paper because they divided: "Early-farmer" in "Early Farmer (AN - Anatolian Neolithic)", "Early Farmer (CEM - Central European Early & Middle Neolithic)", Early farmer (INC - Iberian Neolithic & Chalcolithic)"; "Steppe" in "Steppe Ancestry (CLB - Central European Late Neolithic & Bronze Age)", "Steppe Ancestry (STP - Steppe)".
 
 ## Exercise 2
 
-Subset the dataset to the English, Norwegian, Finnish and Icelandic population (using the POP column) and plot the result (PC1 vs. PC2). Interpret the relationship between populations (e.g., which populations cluster together, is this expected given the geography of the populations, how do the PCs split the populations?).
----> 
-Considering geographical and historical features of the population, we would expect Icelandic and Norwegian populations to be the most close related. We also would expect Norwegian, Icelandic, English populations to be more related with each other than to Finnish population.
+Subset the dataset to the English, Norwegian, Finnish and Icelandic population (using the POP column) and plot the result (PC1 vs. PC2).
+Interpret the relationship between populations (e.g., which populations cluster together, is this expected given the geography of the populations, how do the PCs split the populations?).
+---\> Considering geographical and historical features of the population, we would expect Icelandic and Norwegian populations to be the most close related.
+We also would expect Norwegian, Icelandic, English populations to be more related with each other than to Finnish population.
 
 ```{r}
 ggplot(data = WE_table |> filter(POP %in% c('English', 'Norwegian', "Finnish", "Icelandic")), #filtering
@@ -45,12 +56,15 @@ ggplot(data = WE_table |> filter(POP %in% c('English', 'Norwegian', "Finnish", "
   geom_jitter()+
   labs(title = "Relationship between Norwegian, Finnish, Icelandic, English Populations")
 ```
+
 The graph seems to prove our assumptions.
 
 ## Exercise 3
 
-Subset the dataset to four populations of your choice and plot the result. Interpret the relationship between populations.
---->
+Subset the dataset to four populations of your choice and plot the result.
+Interpret the relationship between populations.
+---\>
+
 ```{r}
 our_choice <- c("Sicilian", "French", "Italian_North", "Spanish")
 ggplot(data = WE_table |> filter(POP %in% our_choice), #Filtering on our choices
@@ -59,11 +73,15 @@ ggplot(data = WE_table |> filter(POP %in% our_choice), #Filtering on our choices
   geom_jitter()+
   labs(title = "Relationship between Sicilian, French, North of Italy, Spanish Populations")
 ```
+
 From the resulting graph it's possible to infer that people from the north of Italy in the dataset are more close related to Spanish and French populations than the Sicilian people.
 
 ## Exercise 4
-Plot the third and fourth principal component (of the four populations). Has the relationship between populations changed?
---->
+
+Plot the third and fourth principal component (of the four populations).
+Has the relationship between populations changed?
+---\>
+
 ```{r}
 ggplot(data = WE_table |>  filter(POP %in% our_choice), #Filtering on our choices
        aes(x = PC3, y = PC4, colour = POP)
@@ -71,15 +89,21 @@ ggplot(data = WE_table |>  filter(POP %in% our_choice), #Filtering on our choice
   geom_jitter()+
   labs(title = "Relationship between Sicilian, French, North of Italy, and Spanish Populations")
 ```
+
 This graph shows different relationship compared to the one showing the correlation between PC1 and PC2.
 Now the Sicilian population is close related to the Spanish population even more than the people from the north of Italy.
+
 ```{r}
 filtered <-  WE_table |> filter(POP%in% our_choice)
 ```
 
 ## Exercise 5
-Plot some other combinations of PC5-PC10 (of the four populations). What can you observe with respect to the separation of populations on the plots (is it better or worse compared to PC1-PC4 plots)? Why?
----> 
+
+Plot some other combinations of PC5-PC10 (of the four populations).
+What can you observe with respect to the separation of populations on the plots (is it better or worse compared to PC1-PC4 plots)?
+Why?
+---\>
+
 ```{r}
 # PC6 and PC7
 ggplot(data = WE_table |>  filter(POP %in% our_choice), #Filtering on our choices
@@ -102,14 +126,20 @@ ggplot(data = WE_table |> filter(POP %in% our_choice), #Filtering on our choices
   geom_jitter()+
   labs(title = "Relationship between Sicilian, French, North of Italy, and Spanish Populations")
 ```
+
 In all the above the combinations between the different principal components (PCs) there are no clear clusters and all the populations are mixed compared to the previous PCs combinations.
 The reason behind this behavior is related to the way in which the principal components are calculated and what they are.
-The principal component analysis (PCA) is a statistical instrument that has as principal aim the one of creating vectors describing the variance between different elements while reducing the dimensions of the data set. The first two PCs are the ones with the most variance between the observations while the others principal components reduce the variables with less variance between them. 
+The principal component analysis (PCA) is a statistical instrument that has as principal aim the one of creating vectors describing the variance between different elements while reducing the dimensions of the data set.
+The first two PCs are the ones with the most variance between the observations while the others principal components reduce the variables with less variance between them.
 Therefore the first two PCs are the one that describe the most the variance inside the sample and the more further PCs are the one with less variance and therefore the resulting graphs show a mixture of data points with no clear pattern between the different population and almost uniform points.
 
 ## Exercise 6
-Correlate the latitude and longitude of ancient individuals with the first two principal components (hint: use the R function merge to merge the dataWE.txt.zip and dataWE_LatLong.txt.zip datasets by the IND column). Report the correlation coefficients and their significance. Comment on the result.
---> 
+
+Correlate the latitude and longitude of ancient individuals with the first two principal components (hint: use the R function merge to merge the dataWE.txt.zip and dataWE_LatLong.txt.zip datasets by the IND column).
+Report the correlation coefficients and their significance.
+Comment on the result.
+--\>
+
 ```{r}
 # ?merge  --> merge two data frames by common columns or row names
 WE_LatLong <- read.table("dataWE_LatLong.txt", header = TRUE)
@@ -170,22 +200,29 @@ Correlations <- data.frame(
   )
 Correlations
 ```
-All the correlation coefficient but one have a p-value under the significance significance level, and the only exception has a p-value slightly above 0.05. Therefore we can refuse the null hypothesis that all the correlation coefficients are equal to zero (expect for the correlation coefficient between Longitude and PC2 that is a bit uncertain).
+
+All the correlation coefficient but one have a p-value under the significance significance level, and the only exception has a p-value slightly above 0.05.
+Therefore we can refuse the null hypothesis that all the correlation coefficients are equal to zero (expect for the correlation coefficient between Longitude and PC2 that is a bit uncertain).
 The highest correlation coefficient is related to Longitude and PC2.
 
 # East Eurasian populations
 
-
 ## Exercice 7
-Plot the first two principal components of the dataEE.txt.zip dataset. Use the POP column to color the points. Interpret the relationship between populations (e.g., which populations cluster together, is this expected given the geography of the populations, how do the PCs split the populations?).
---->
 
-The eastern coast of Siberia is part of USA, whereas the the western coast belongs to Russia. For this reason, we would expect Siberian population to be related to all the populations studied.
+Plot the first two principal components of the dataEE.txt.zip dataset.
+Use the POP column to color the points.
+Interpret the relationship between populations (e.g., which populations cluster together, is this expected given the geography of the populations, how do the PCs split the populations?).
+---\>
 
-The Bering Strait connects Siberia with Alaska. The Arctic and Subarctic regions are inhabited by the Indigenous populations of Bering, Siberia, and Aleutians. This suggests that these groups likely share strong genetic similarities due to proximity. Similarly, the Aleutians and the Kuskokwim live in Alaska, which could suggest a strong relationship between these populations.
+The eastern coast of Siberia is part of USA, whereas the the western coast belongs to Russia.
+For this reason, we would expect Siberian population to be related to all the populations studied.
+
+The Bering Strait connects Siberia with Alaska.
+The Arctic and Subarctic regions are inhabited by the Indigenous populations of Bering, Siberia, and Aleutians.
+This suggests that these groups likely share strong genetic similarities due to proximity.
+Similarly, the Aleutians and the Kuskokwim live in Alaska, which could suggest a strong relationship between these populations.
 
 On the other hand, the ancestors of the Kuskokwim crossed the Bering Strait into Alaska, and these migratory movements could have resulted in some degree of similarity between the populations.
-
 
 ```{r}
 # Import dataset
@@ -196,26 +233,57 @@ ggplot(data = EE_table, aes(x = PC1, y = PC2, colour = POP))+
   geom_jitter()+
   labs(title = "Relationship between Russia Baikal, Russia Bering, Russia, USA Aleut, USA Kuskokwim, and Siberian Populations")
 ```
-The obtained plot shows that Russian population cluster tightly together and is far from all other populations (especially for PC1). That means that, even though the historical connexions, the relationship that Russian population shares with the other populations is less strong than the relationship observed within the other populations.
 
-Siberian population shows the largest variation for both PC1 and PC2, and it is related to all the studied populations (being Russian population the less related). This meets our expectations.
+The obtained plot shows that Russian population cluster tightly together and is far from all other populations (especially for PC1).
+That means that, even though the historical connexions, the relationship that Russian population shares with the other populations is less strong than the relationship observed within the other populations.
 
-Siberian, Bering, and Aleutian populations have a close relationship, as expected. 
+Siberian population shows the largest variation for both PC1 and PC2, and it is related to all the studied populations (being Russian population the less related).
+This meets our expectations.
+
+Siberian, Bering, and Aleutian populations have a close relationship, as expected.
 
 Also, Auletian population clusters together and is related to Kuskokwim for PC2.
 
 ## Exercise 8
-Plot the third and fourth principal component of the dataEE.txt.zip dataset. How has the relationship between populations changed?
---->
+
+Plot the third and fourth principal component of the dataEE.txt.zip dataset.
+How has the relationship between populations changed?
+---\>
+
 ```{r}
 # Plot
 ggplot(data = EE_table, aes(x = PC3, y = PC4, colour = POP))+
   geom_jitter()+
   labs(title = "Relationship between Russia Baikal, Russia Bering, Russia, USA Aleut, USA Kuskokwim, and Siberian Populations")
 ```
-Plotting for PC3 and PC4 we observed a mayor change: Russian population is more closely related with Siberian population at PC3 and PC4 than PC1 and PC2. That means that both populations are more similar for the traits associated with less important components (PC3 and PC4), but differ significantly for the main components of the variation (PC1 and PC2).
+
+Plotting for PC3 and PC4 we observed a mayor change: Russian population is more closely related with Siberian population at PC3 and PC4 than PC1 and PC2.
+That means that both populations are more similar for the traits associated with less important components (PC3 and PC4), but differ significantly for the main components of the variation (PC1 and PC2).
 
 # General questions
 
 ## Exercise 9
 
+What would be some artefacts of ancient DNA sequencing that makes them unsuitable for calculating PCs?
+---\>
+
+There are several potential artefacts that can render the data unsuitable or biased.
+Some of the main artefacts are:
+
+1.  Degradation of DNA: ancient DNA can be highly fragmented due its age making it difficult to accurately align read to reference genome and reducing the accuracy and resolution of population structure analyses.
+
+2.  Low covergae and missing data: some parts of the genome may not be sequeced, causing missing data dor SNPs.
+    Also, random alleles may be over or underrepresented at heterozygous sites because of low coverage.
+
+3.  Contamination: environmental microbes or moder human DNA during the handeling can contaminate the ancient DNA.
+
+4.  Reference bias: ancient genomes are often mapped to a modern human reference genome, which can lead to the los of rare variants in ancient populations.
+
+## Exercise 10
+
+Apart from genotype data, what other type of biological data can you analyze with PCA?
+
+---\>
+
+There are diferent types of biological data that can be used.
+For instance, it is possible to use proteomics, epigenomic (DNA methylation levels, histone modification profiles, etc.), and phenotypic data.
