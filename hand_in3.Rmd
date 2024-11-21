@@ -171,4 +171,33 @@ Correlations
 All the correlation coefficient but one have a p-value under the significance significance level, and the only exception has a p-value slightly above 0.05. Therefore we can refuse the null hypothesis that all the correlation coefficients are equal to zero (expect for the correlation coefficient between Longitude and PC2 that is a bit uncertain).
 The highest correlation coefficient is related to Longitude and PC2.
 
+# Exercice 7
+Plot the first two principal components of the dataEE.txt.zip dataset. Use the POP column to color the points. Interpret the relationship between populations (e.g., which populations cluster together, is this expected given the geography of the populations, how do the PCs split the populations?).
+--->
+
+The eastern coast of Siberia is part of USA, whereas the the western coast belongs to Russia. For this reason, we would expect Siberian population to be related to all the populations studied.
+
+The Bering Strait connects Siberia with Alaska. The Arctic and Subarctic regions are inhabited by the Indigenous populations of Bering, Siberia, and Aleutians. This suggests that these groups likely share strong genetic similarities due to proximity. Similarly, the Aleutians and the Kuskokwim live in Alaska, which could suggest a strong relationship between these populations.
+
+On the other hand, the ancestors of the Kuskokwim crossed the Bering Strait into Alaska, and these migratory movements could have resulted in some degree of similarity between the populations.
+
+
+```{r}
+# Import dataset
+EE_table <- read.table("dataEE.txt", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+# Plot
+ggplot(data = EE_table, aes(x = PC1, y = PC2, colour = POP))+
+  geom_jitter()+
+  labs(title = "Relationship between Russia Baikal, Russia Bering, Russia, USA Aleut, USA Kuskokwim, and Siberian Populations")
+```
+The obtained plot shows that Russian population cluster tightly together and is far from all other populations (especially for PC1). That means that, even though the historical connexions, the relationship that Russian population shares with the other populations is less strong than the relationship observed within the other populations.
+
+Siberian population shows the largest variation for both PC1 and PC2, and it is related to all the studied populations (being Russian population the less related). This meets our expectations.
+
+Siberian, Bering, and Aleutian populations have a close relationship, as expected. 
+
+Also, Auletian population clusters together and is related to Kuskokwim for PC2.
+
+
 
