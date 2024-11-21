@@ -199,5 +199,15 @@ Siberian, Bering, and Aleutian populations have a close relationship, as expecte
 
 Also, Auletian population clusters together and is related to Kuskokwim for PC2.
 
+# Exercise 8
+Plot the third and fourth principal component of the dataEE.txt.zip dataset. How has the relationship between populations changed?
+--->
+```{r}
+# Plot
+ggplot(data = EE_table, aes(x = PC3, y = PC4, colour = POP))+
+  geom_jitter()+
+  labs(title = "Relationship between Russia Baikal, Russia Bering, Russia, USA Aleut, USA Kuskokwim, and Siberian Populations")
+```
+Plotting for PC3 and PC4 we observed a mayor change: Russian population is more closely related with Siberian population at PC3 and PC4 than PC1 and PC2. That means that both populations are more similar for the traits associated with less important components (PC3 and PC4), but differ significantly for the main components of the variation (PC1 and PC2).
 
 
