@@ -3,7 +3,9 @@ Loading paper data - 230 West Eurasians who lived between 6500 and 300 bc - by M
 ```{r}
 library(tidyverse)
 ```
-# Exercise 1
+# West Eurasian populations
+
+## Exercise 1
 Plot the first two principal components of the dataWE.txt.zip dataset. Use the ModAnc column to color the points.
 --->
 
@@ -30,7 +32,7 @@ This plot in chunk 2 has less categories that the one in the paper because they 
 "Early-farmer" in "Early Farmer (AN - Anatolian Neolithic)", "Early Farmer (CEM - Central European Early & Middle Neolithic)", Early farmer (INC - Iberian Neolithic & Chalcolithic)";
 "Steppe" in "Steppe Ancestry (CLB - Central European Late Neolithic & Bronze Age)", "Steppe Ancestry (STP - Steppe)".
 
-# Exercise 2
+## Exercise 2
 
 Subset the dataset to the English, Norwegian, Finnish and Icelandic population (using the POP column) and plot the result (PC1 vs. PC2). Interpret the relationship between populations (e.g., which populations cluster together, is this expected given the geography of the populations, how do the PCs split the populations?).
 ---> 
@@ -45,7 +47,7 @@ ggplot(data = WE_table |> filter(POP %in% c('English', 'Norwegian', "Finnish", "
 ```
 The graph seems to prove our assumptions.
 
-# Exercise 3
+## Exercise 3
 
 Subset the dataset to four populations of your choice and plot the result. Interpret the relationship between populations.
 --->
@@ -59,7 +61,7 @@ ggplot(data = WE_table |> filter(POP %in% our_choice), #Filtering on our choices
 ```
 From the resulting graph it's possible to infer that people from the north of Italy in the dataset are more close related to Spanish and French populations than the Sicilian people.
 
-# Exercise 4
+## Exercise 4
 Plot the third and fourth principal component (of the four populations). Has the relationship between populations changed?
 --->
 ```{r}
@@ -75,7 +77,7 @@ Now the Sicilian population is close related to the Spanish population even more
 filtered <-  WE_table |> filter(POP%in% our_choice)
 ```
 
-# Exercise 5
+## Exercise 5
 Plot some other combinations of PC5-PC10 (of the four populations). What can you observe with respect to the separation of populations on the plots (is it better or worse compared to PC1-PC4 plots)? Why?
 ---> 
 ```{r}
@@ -105,7 +107,7 @@ The reason behind this behavior is related to the way in which the principal com
 The principal component analysis (PCA) is a statistical instrument that has as principal aim the one of creating vectors describing the variance between different elements while reducing the dimensions of the data set. The first two PCs are the ones with the most variance between the observations while the others principal components reduce the variables with less variance between them. 
 Therefore the first two PCs are the one that describe the most the variance inside the sample and the more further PCs are the one with less variance and therefore the resulting graphs show a mixture of data points with no clear pattern between the different population and almost uniform points.
 
-# Exercise 6
+## Exercise 6
 Correlate the latitude and longitude of ancient individuals with the first two principal components (hint: use the R function merge to merge the dataWE.txt.zip and dataWE_LatLong.txt.zip datasets by the IND column). Report the correlation coefficients and their significance. Comment on the result.
 --> 
 ```{r}
@@ -171,7 +173,10 @@ Correlations
 All the correlation coefficient but one have a p-value under the significance significance level, and the only exception has a p-value slightly above 0.05. Therefore we can refuse the null hypothesis that all the correlation coefficients are equal to zero (expect for the correlation coefficient between Longitude and PC2 that is a bit uncertain).
 The highest correlation coefficient is related to Longitude and PC2.
 
-# Exercice 7
+# East Eurasian populations
+
+
+## Exercice 7
 Plot the first two principal components of the dataEE.txt.zip dataset. Use the POP column to color the points. Interpret the relationship between populations (e.g., which populations cluster together, is this expected given the geography of the populations, how do the PCs split the populations?).
 --->
 
@@ -199,7 +204,7 @@ Siberian, Bering, and Aleutian populations have a close relationship, as expecte
 
 Also, Auletian population clusters together and is related to Kuskokwim for PC2.
 
-# Exercise 8
+## Exercise 8
 Plot the third and fourth principal component of the dataEE.txt.zip dataset. How has the relationship between populations changed?
 --->
 ```{r}
@@ -210,4 +215,7 @@ ggplot(data = EE_table, aes(x = PC3, y = PC4, colour = POP))+
 ```
 Plotting for PC3 and PC4 we observed a mayor change: Russian population is more closely related with Siberian population at PC3 and PC4 than PC1 and PC2. That means that both populations are more similar for the traits associated with less important components (PC3 and PC4), but differ significantly for the main components of the variation (PC1 and PC2).
 
+# General questions
+
+## Exercise 9
 
